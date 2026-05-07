@@ -1,41 +1,41 @@
 import React, { useState, useEffect } from 'react';
-import { View, FlatList, Text, StyleSheet } from 'react-native';
+import { View, FlatList, Text, TextInput, StyleSheet } from 'react-native';
 import api from '../services/api';
 import ProductCard from '../components/ProductCard';
 import Loading from '../components/Loading';
 
-// Recebemos o 'navigation' por parâmetro para conseguirmos trocar de tela
 export default function Home({ navigation }) {
-  // Criando os estados para guardar os produtos, o aviso de loading e possíveis erros
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  // Novo estado para guardar o texto da busca
+  const [searchText, setSearchText] = useState('');
 
-  // O useEffect roda a função fetchProducts assim que a tela abre
   useEffect(() => {
     fetchProducts();
   }, []);
 
   async function fetchProducts() {
     try {
-      // Faz a requisição na Fake Store API
       const response = await api.get('/products');
-      setProducts(response.data); // Guarda os dados no estado
+      setProducts(response.data);
     } catch (err) {
-      // Se der erro (ex: sem internet), salva a mensagem amigável
       setError('Ops! Não foi possível carregar os produtos. Verifique sua conexão e tente novamente.');
     } finally {
-      // Independente de dar certo ou errado, tira o loading da tela
       setLoading(false);
     }
   }
 
-  // Se estiver carregando, mostra o componente de Loading que criamos
+  // Lógica de filtro: transforma tudo em minúsculo para a busca não ser "case sensitive"
+  const filteredProducts = products.filter(product =>
+    product.title.toLowerCase().includes(searchText.toLowerCase())
+  );
+
   if (loading) {
     return <Loading />;
   }
 
-  // Se deu erro, mostra a mensagem amigável na tela
   if (error) {
     return (
       <View style={styles.center}>
@@ -44,21 +44,36 @@ export default function Home({ navigation }) {
     );
   }
 
-  // Se deu tudo certo, renderiza a lista de produtos
   return (
     <View style={styles.container}>
-      <FlatList
-        data={products}
-        keyExtractor={(item) => String(item.id)}
-        renderItem={({ item }) => (
-          <ProductCard
-            data={item}
-            // Ao clicar no card, vai para a tela 'Details' e manda os dados do produto junto
-            onPress={() => navigation.navigate('Details', { product: item })}
-          />
-        )}
-        contentContainerStyle={{ padding: 16 }}
-      />
+      {/* Campo de Busca */}
+      <View style={styles.searchContainer}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Buscar produto por nome..."
+          value={searchText}
+          onChangeText={setSearchText}
+        />
+      </View>
+
+      {/* Regra de negócio: Aviso de 'nenhum resultado' */}
+      {filteredProducts.length === 0 && searchText !== '' ? (
+        <View style={styles.center}>
+          <Text style={styles.emptyText}>Nenhum produto encontrado para "{searchText}".</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={filteredProducts}
+          keyExtractor={(item) => String(item.id)}
+          renderItem={({ item }) => (
+            <ProductCard
+              data={item}
+              onPress={() => navigation.navigate('Details', { product: item })}
+            />
+          )}
+          contentContainerStyle={{ padding: 16 }}
+        />
+      )}
     </View>
   );
 }
@@ -67,6 +82,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
+  },
+  searchContainer: {
+    padding: 16,
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderColor: '#e0e0e0',
+  },
+  searchInput: {
+    height: 40,
+    backgroundColor: '#f5f5f5',
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    fontSize: 16,
   },
   center: {
     flex: 1,
@@ -77,6 +105,11 @@ const styles = StyleSheet.create({
   errorText: {
     fontSize: 16,
     color: '#ff0000',
+    textAlign: 'center',
+  },
+  emptyText: {
+    fontSize: 16,
+    color: '#666',
     textAlign: 'center',
   },
 });
