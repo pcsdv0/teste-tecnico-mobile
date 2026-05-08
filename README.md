@@ -1,139 +1,150 @@
-Aqui está a versão "traduzida" e humanizada do seu README. Troquei aquele vocabulário robótico e corporativo por uma linguagem mais natural e direta. Agora ele soa como um estudante de Sistemas de Informação de verdade, que sabe muito bem o que está fazendo, mas que sabe explicar isso de um jeito que qualquer pessoa entenda.
+# Documentação do Projeto: Aplicativo de Consulta de Produtos
 
-Pode copiar e colar exatamente como está abaixo:
+## Nome do candidato
+**Paulo César Santos de Vasconcelos**
 
-```markdown
-# Desafio Técnico: Aplicativo de Consulta de Produtos (Fake Store API)
+---
 
-**Desenvolvedor:** Paulo César Santos de Vasconcelos  
-**Instituição:** Sistemas de Informação - UNINASSAU  
-**Localidade:** Olinda, Pernambuco
+## Descrição do projeto
+Este projeto consiste no desenvolvimento de um aplicativo mobile em React Native focado no consumo e exibição de dados da *Fake Store API*. O objetivo central foi entregar uma solução funcional e com alto padrão de usabilidade, assemelhando-se a um produto real pronto para o mercado.
 
+As principais funcionalidades implementadas incluem:
+* **Catálogo Dinâmico:** Listagem dos produtos em um layout de vitrine responsivo (duas colunas).
+* **Busca em Tempo Real:** Mecanismo de filtragem instantânea no lado do cliente (em memória), mitigando requisições desnecessárias à API.
+* **Visualização Detalhada:** Telas de detalhes com formatação contextualizada para o público brasileiro.
+* **Resiliência de Rede:** Tratamento ativo de erros de conexão para evitar travamentos ou fechamentos inesperados do aplicativo.
 
-## 1. Sobre o Projeto
-
-Esse projeto é um aplicativo mobile que construí em **React Native** para consumir e exibir os dados da *Fake Store API*. Minha ideia principal não foi só listar os produtos, mas sim criar um aplicativo que pareça uma loja de verdade e que seja gostoso de usar.
-
-Para entregar um resultado bem completo, foquei nos seguintes pontos:
-* **Visual de Loja (Vitrine):** Em vez de colocar um item embaixo do outro, dividi a tela em duas colunas. Assim, aproveitamos melhor o espaço da tela do celular.
-* **Busca Rápida e Inteligente:** O campo de pesquisa filtra os produtos na mesma hora em que a pessoa digita. Também tomei o cuidado de ajustar a tela para que, se não houver nenhum produto com aquele nome, o aviso não fique escondido atrás do teclado.
-* **Detalhes do Produto:** Clicando em um produto, o usuário vai para uma tela com a foto maior, descrição completa, categoria traduzida para o português e o preço formatado em Reais (R$).
-* **Preparado para Ficar Sem Internet:** Ninguém gosta de um app que trava ou fecha do nada. Se a conexão cair, o aplicativo segura o erro e mostra um aviso amigável na tela pedindo para verificar o Wi-Fi.
-* **Cuidado com os Detalhes (UX):** Adicionei o Modo Escuro (que é muito mais confortável para os olhos) e uma animação de "esqueleto piscando" (Skeleton) enquanto os produtos carregam, dando a sensação de que o app é muito mais rápido.
-
-
-## 2. Como Pensei no Fluxo do App
-
-Antes de sair programando, estruturei como a informação ia caminhar dentro do aplicativo.
-
-### 2.1. O que o usuário pode fazer?
-* **Entrar no app:** O app vai até a API, busca a lista de produtos e guarda na memória.
-* **Pesquisar:** O app pega a palavra digitada e filtra a lista que já está na memória (o que deixa a busca muito mais rápida, sem precisar usar a internet de novo).
-* **Ver Detalhes:** O usuário escolhe um produto, e o app leva esses dados específicos para a próxima tela.
-* **Mudar o Tema:** O usuário clica no botão de sol/lua, e o app avisa todas as telas para mudarem as cores na mesma hora.
-
-### 2.2. O caminho das informações (Diagrama)
+Para ilustrar o escopo do projeto, o Diagrama de Casos de Uso abaixo mapeia as interações mapeadas entre o usuário final, as funcionalidades do sistema e o serviço externo (API):
 
 ```mermaid
-graph TD
-    A[Abre o App] --> B{Pede os dados para a API}
-    B -- Sem Internet --> C[Mostra Tela de Erro Amigável]
-    B -- Tudo Certo --> D[Guarda os produtos na memória]
-    D --> E[Mostra a Vitrine na tela]
-    E --> F[Usuário digita na busca]
-    F --> G[Filtra os itens na hora]
-    E --> H[Usuário clica no Modo Escuro]
-    H --> I[Muda as cores de todo o app]
-    E --> J[Usuário clica em um produto]
-    J --> K[Abre a tela de Detalhes]
+flowchart LR
+    %% Ator Principal
+    Usuario([👤 Usuário Final])
+    
+    %% Fronteira do Sistema
+    subgraph App [App Consulta de Produtos]
+        direction TB
+        A(Visualizar Vitrine de Produtos)
+        B(Pesquisar Produto por Nome)
+        C(Acessar Detalhes do Produto)
+        D(Alternar Tema Claro/Escuro)
+        E(Visualizar Alerta de Erro de Rede)
+    end
+    
+    %% Sistema Externo
+    API[(Fake Store API)]
+
+    %% Ações do Usuário
+    Usuario --- A
+    Usuario --- B
+    Usuario --- C
+    Usuario --- D
+    Usuario --- E
+
+    %% Integrações
+    A -. "Consome HTTP GET /products" .-> API
+    E -. "Intercepta Falha/Timeout" .-> API
 
 ```
 
 ---
 
-## 3. As Tecnologias que Escolhi e o Porquê
+## Tecnologias utilizadas
 
-Tentei manter o projeto o mais leve possível, usando ferramentas consagradas no mercado:
+A arquitetura e as ferramentas foram definidas visando performance, manutenibilidade e alinhamento com os padrões da indústria:
 
-1. **React Native (com Expo):** Escolhi porque facilita muito criar o app tanto para Android quanto para iOS ao mesmo tempo.
-2. **JavaScript:** Usei recursos modernos da linguagem (como o `.filter`) para fazer a busca de produtos funcionar sem engasgos.
-3. **Styled Components:** Em vez de fazer arquivos de estilo separados, usei essa biblioteca. Ela me ajudou muito a fazer o Modo Escuro funcionar de um jeito simples e rápido.
-4. **React Navigation:** É a biblioteca padrão do mercado para fazer a troca de telas. Ela deixa a animação de ir e voltar muito parecida com a de um aplicativo nativo.
-5. **Axios:** Preferi usar o Axios em vez do `fetch` normal do JavaScript porque ele organiza melhor a comunicação com a API e facilita tratar os erros de conexão.
-6. **Context API:** Usei essa ferramenta do próprio React para guardar a informação de "Qual tema está ativo agora?" e espalhar isso por todo o app facilmente.
-
----
-
-## 4. Algumas Decisões Técnicas Importantes
-
-* **Listagem Otimizada (FlatList):** Se a API mandasse mil produtos de uma vez, o celular poderia travar. Para evitar isso, usei o `FlatList`, que só carrega na memória os itens que estão aparecendo na tela naquele momento.
-* **Loading Skeleton:** Em vez de deixar uma bolinha girando ou uma tela branca chata enquanto a internet carrega, desenhei blocos cinzas piscando com o formato dos produtos. Fica muito mais profissional.
-* **Cuidado com o Teclado:** Configurei a lista de produtos para esconder o teclado automaticamente assim que o usuário começa a rolar a tela para baixo.
-* **Preços em Reais:** O servidor me manda os preços em Dólar e as categorias em Inglês. Para melhorar a experiência do usuário brasileiro, criei funções que traduzem os nomes e formatam os números para a nossa moeda (R$).
+* **React Native & Expo:** Escolhidos pela agilidade no desenvolvimento multiplataforma e fluidez nos testes físicos.
+* **JavaScript:** Linguagem base, utilizando métodos funcionais avançados para manipulação de dados na busca.
+* **React Navigation (Native Stack):** Selecionado para garantir roteamento nativo, proporcionando transições limpas entre as telas.
+* **Axios:** Cliente HTTP adotado por oferecer melhor controle sobre interceptações e limites de tempo (*timeout*) nas requisições.
+* **Styled Components:** Utilizado para encapsular a estilização (CSS-in-JS) e gerenciar dinamicamente a troca de design do sistema.
+* **Context API:** Solução nativa do React empregada para o gerenciamento de estados globais (como a alternância de Tema), evitando o acoplamento de bibliotecas externas complexas.
 
 ---
 
-## 5. Como Organizei os Arquivos
+## Como executar o projeto
 
-Gosto de deixar a casa arrumada para que qualquer programador consiga entender meu código rápido:
+Para compilar e rodar a aplicação em ambiente local, é necessário possuir o Node.js instalado e o aplicativo Expo Go no smartphone.
 
-
-src/
-├── components/ # Pedaços da tela que se repetem (o Cartão do Produto, o Skeleton)
-├── contexts/   # Onde fica a inteligência do Tema Claro/Escuro
-├── routes/     # Onde configuro quais telas existem no app
-├── screens/    # As telas inteiras de fato (A Home e os Detalhes)
-├── services/   # A configuração da internet/API (Axios)
-├── styles/     # As cores padrões do aplicativo
-└── utils/      # Pequenas funções de ajuda (como a de colocar o "R$")
-
-
-## 6. Como Rodar o Projeto no seu Computador
-
-### O que você vai precisar:
-
-* Ter o **Node.js** instalado no seu computador.
-* Ter o aplicativo **Expo Go** instalado no seu celular.
-
-### Passo a Passo:
-
-Abra o terminal e digite estes comandos, um de cada vez:
-
-1. **Baixe o projeto:**
+1. **Clone o repositório:**
 ```bash
 git clone <cole-o-link-do-seu-repositorio-aqui>
 
 ```
 
 
-2. **Entre na pasta:**
+2. **Acesse a raiz do projeto:**
 ```bash
 cd <nome-da-pasta>
 
 ```
 
 
-3. **Instale os pacotes necessários:**
+3. **Instale as dependências:**
 ```bash
 npm install
 
 ```
 
 
-4. **Inicie o aplicativo:**
+4. **Inicie o Metro Bundler (Servidor):**
 ```bash
 npx expo start
 
 ```
 
 
-5. **Teste no celular:** Pegue seu celular, abra a câmera (se for iPhone) ou o Expo Go (se for Android) e leia o QR Code que vai aparecer no monitor.
+5. **Teste em ambiente físico ou emulado:** Escaneie o QR Code gerado no terminal com o aplicativo Expo Go para visualizar o app no celular, ou pressione a tecla `a` no terminal para rodar via emulador Android.
 
 ---
 
-## 7. Prints do Aplicativo em Ação
+## Estrutura de pastas
 
-*(Lembre-se de colocar as suas imagens aqui, ou apagar essa parte)*
+A hierarquia foi desenhada utilizando princípios de separação de responsabilidades para facilitar a manutenção do código:
+
+```text
+src/
+├── components/ # Componentes de interface reutilizáveis (ProductCard, SkeletonCard)
+├── contexts/   # Gerenciamento de estados globais da aplicação (ThemeContext)
+├── routes/     # Orquestração e configuração de roteamento das telas
+├── screens/    # Telas completas que compõem a jornada do usuário (Home, Details)
+├── services/   # Configuração e instâncias de comunicação HTTP (api.js)
+├── styles/     # Definições globais de layout e tipografia
+└── utils/      # Funções de auxílio geral (formatação de moeda e traduções)
+
+```
 
 ---
 
+## Decisões técnicas adotadas
+
+Durante a construção da aplicação, priorizei escolhas técnicas que protegessem a infraestrutura e melhorassem a percepção de qualidade do usuário final:
+
+1. **Otimização de Listagem:** Implementação do `FlatList` para a renderização do catálogo. O *lazy loading* nativo deste componente otimiza o consumo de memória, renderizando apenas os itens visíveis na tela e evitando engasgos de processamento.
+2. **Indicadores de Carregamento (Loading Skeleton):** Para suavizar a espera durante o consumo da API, desenvolvi *Skeleton Cards* animados com a Animated API nativa. Esta abordagem engaja mais o usuário do que indicadores circulares tradicionais.
+3. **Prevenção de Colapso de Layout:** Elementos de feedback (como o estado de busca vazia) foram posicionados com cálculos de margem (marginTop) para garantir que o teclado virtual do sistema operacional não sobreponha a mensagem, preservando a visibilidade da informação.
+4. **Camada de Formatação (UX):** Embora os dados brutos da API sejam em inglês, criei dicionários e funções formatadoras na camada *utils* para apresentar as categorias em português e os valores monetários localizados (R$).
+5. **Manejo de Falhas e Resiliência:** Configurei um *timeout* estrito na instância do Axios. Caso a rede oscile ou o servidor atrase a resposta, o usuário não fica retido em um carregamento infinito; o aplicativo intercepta a falha de forma assíncrona e entrega um *fallback* visual informando o erro de conexão de forma clara.
+
+---
+
+## Prints da aplicação funcionando
+
+As capturas abaixo validam as entregas de interface, resiliência estrutural e tratamentos de estado.
+
+### 1. Vitrine Dinâmica e Tema Escuro
+<p align="center">
+  <img src="./assets/home_claro.jpeg" width="250" style="margin-right: 10px;" alt="Home Claro" />
+  <img src="./assets/home_escuro.jpeg" width="250" alt="Home Escuro" />
+</p>
+
+### 2. Busca Isolada e Fluxo de Detalhes
+<p align="center">
+  <img src="./assets/busca_vazia.jpeg" width="250" style="margin-right: 10px;" alt="Busca Vazia" />
+  <img src="./assets/detalhes.jpeg" width="250" alt="Detalhes do Produto" />
+</p>
+
+### 3. Interceptação de Erros de Rede
+<p align="center">
+  <img src="./assets/erro_conexao.jpeg" width="250" alt="Erro de Conexão" />
+</p>

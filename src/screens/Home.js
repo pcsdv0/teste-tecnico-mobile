@@ -23,11 +23,10 @@ export default function Home({ navigation }) {
 
   async function fetchProducts() {
     try {
-      const response = await api.get('/products');
+      // De volta ao normal para buscar os 20 produtos reais!
+      const response = await api.get('/products'); 
       setProducts(response.data);
     } catch (err) {
-      // O try/catch é essencial aqui. Se a conexão do celular cair, 
-      // o app não fecha de forma inesperada.
       setError('Falha de conexão. Verifique sua internet.');
     } finally {
       setLoading(false);
@@ -45,12 +44,12 @@ export default function Home({ navigation }) {
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
       
-      {/* Cabeçalho Minimalista */}
+      
       <View style={styles.header}>
-        <View>
-          <Text style={[styles.headerSubtitle, { color: theme.textSecondary }]}>Catálogo</Text>
-          <Text style={[styles.headerTitle, { color: theme.text }]}>Descubra</Text>
-        </View>
+       
+        <Text style={[styles.headerTitleClean, { color: theme.text }]}>Catálogo</Text>
+        
+        
         <TouchableOpacity onPress={toggleTheme} style={[styles.iconButton, { backgroundColor: theme.surface, borderColor: theme.border }]}>
           <Feather name={isDark ? "sun" : "moon"} size={20} color={theme.text} />
         </TouchableOpacity>
@@ -109,7 +108,8 @@ export default function Home({ navigation }) {
           <Text style={[styles.messageSubtitle, { color: theme.textSecondary }]}>{error}</Text>
         </View>
       ) : filteredProducts.length === 0 ? (
-        <View style={styles.messageContainer}>
+        // NOVO: Usando o emptyContainer aqui para subir a lupa
+        <View style={styles.emptyContainer}>
           <Feather name="search" size={48} color={theme.border} style={{ marginBottom: 16 }} />
           <Text style={[styles.messageSubtitle, { color: theme.textSecondary }]}>Nenhum produto encontrado.</Text>
         </View>
@@ -140,13 +140,19 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'center', // Isso aqui garante que o texto e o botão fiquem na mesma linha horizontalmente!
     paddingHorizontal: 20,
-    paddingTop: 20,
+    paddingTop: 30,
     paddingBottom: 16,
   },
-  headerSubtitle: { fontSize: 14, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 4 },
-  headerTitle: { fontSize: 32, fontWeight: '900' },
+  
+  // NOVO: Apenas um título limpo e alinhado
+  headerTitleClean: { 
+    fontSize: 28, 
+    fontWeight: 'bold', 
+    textTransform: 'capitalize', 
+  },
+  
   iconButton: {
     width: 44,
     height: 44,
@@ -185,6 +191,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32, 
     minHeight: 400, 
   },
+  
+  // NOVO: Estilo exclusivo para a busca vazia (fica na parte de cima da tela para fugir do teclado)
+  emptyContainer: {
+    alignItems: 'center',
+    paddingHorizontal: 32,
+    marginTop: 80, 
+    minHeight: 300,
+  },
+
   messageTitle: {
     fontSize: 22,
     fontWeight: 'bold',
