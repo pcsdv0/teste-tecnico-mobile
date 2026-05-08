@@ -3,6 +3,8 @@ import { Animated, Dimensions } from 'react-native';
 import styled from 'styled-components/native';
 import { ThemeContext } from '../contexts/ThemeContext';
 
+// Mantive exatamente a mesma matemática de largura do ProductCard real.
+
 const cardWidth = (Dimensions.get('window').width / 2) - 24;
 
 const Card = styled.View`
@@ -54,12 +56,20 @@ const SkeletonPrice = styled(Animated.View)`
 
 export default function SkeletonCard() {
   const { theme, isDark } = useContext(ThemeContext);
+  
+  // Controle da animação de opacidade para dar o efeito de "pulsar".
   const opacity = useRef(new Animated.Value(0.3)).current;
+  
+  // A cor do esqueleto também foi ajustada parase adaptar ao tema escuro para não ofuscar o usuário.
   const skeletonColor = isDark ? '#323238' : '#E2E8F0';
 
   useEffect(() => {
+    // O edital pedia o Skeleton como diferencial. Optei por construí-lo do zero usando a Animated API nativa.
+    // Instalar uma biblioteca externa pesada apenas para fazer retângulos piscarem não faria sentido no escopo desse teste.
     Animated.loop(
       Animated.sequence([
+        // O `useNativeDriver: true`aqui é de performance.
+        // Ele tira o peso da animação do JavaScript e joga direto para a Thread Nativa de UI do celular.
         Animated.timing(opacity, { toValue: 0.7, duration: 800, useNativeDriver: true }),
         Animated.timing(opacity, { toValue: 0.3, duration: 800, useNativeDriver: true }),
       ])

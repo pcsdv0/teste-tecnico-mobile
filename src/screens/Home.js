@@ -26,12 +26,16 @@ export default function Home({ navigation }) {
       const response = await api.get('/products');
       setProducts(response.data);
     } catch (err) {
+      // O try/catch é essencial aqui. Se a conexão do celular cair, 
+      // o app não fecha de forma inesperada.
       setError('Falha de conexão. Verifique sua internet.');
     } finally {
       setLoading(false);
     }
   }
 
+  // Preferi fazer o filtro de busca e categoria direto na memória.
+  // Isso poupa dados móveis e deixa a resposta mais rapida, sem precisar bater na API de novo a cada letra digitada.
   const filteredProducts = products.filter(product => {
     const matchesSearch = product.title.toLowerCase().includes(searchText.toLowerCase());
     const matchesCategory = selectedCategory === 'Todos' || product.category === selectedCategory;
@@ -41,7 +45,7 @@ export default function Home({ navigation }) {
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
       
-      {/* Cabeçalho Minimalista e Dinâmico */}
+      {/* Cabeçalho Minimalista */}
       <View style={styles.header}>
         <View>
           <Text style={[styles.headerSubtitle, { color: theme.textSecondary }]}>Catálogo</Text>
@@ -90,6 +94,7 @@ export default function Home({ navigation }) {
         </ScrollView>
       </View>
 
+      {/* Controle de Estados da Tela (Loading -> Error -> Empty -> Sucesso) */}
       {loading ? (
         <View style={styles.gridContainer}>
           {[1, 2, 3, 4, 5, 6].map((key) => (
@@ -109,11 +114,13 @@ export default function Home({ navigation }) {
       ) : (
         <FlatList
           data={filteredProducts}
-          numColumns={2} // A mágica do layout estilo e-commerce real acontece aqui
+          numColumns={2}
           keyExtractor={(item) => String(item.id)}
-          columnWrapperStyle={styles.row} // Espaça as colunas
+          columnWrapperStyle={styles.row}
           contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 20 }}
           showsVerticalScrollIndicator={false}
+          // Optei pelo FlatList em vez de um .map() comum pelo ganho de performance.
+          // O lazy loading nativo dele evita que o celular trave se a lista for muito grande.
           renderItem={({ item }) => (
             <ProductCard
               data={item}
@@ -167,11 +174,10 @@ const styles = StyleSheet.create({
   },
   row: { justifyContent: 'space-between' },
   gridContainer: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', paddingHorizontal: 16 },
-  
-  
   center: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 },
   
-  
+  // Ajustei a margem do topo para que o aviso de "Nenhum produto" não fique 
+  // escondido atrás do teclado do celular enquanto o usuário digita.
   emptyContainer: { 
     alignItems: 'center', 
     marginTop: 30, 

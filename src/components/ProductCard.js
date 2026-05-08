@@ -5,7 +5,8 @@ import { ThemeContext } from '../contexts/ThemeContext';
 import { formatCurrency } from '../utils/formatters';
 import { Feather } from '@expo/vector-icons';
 
-// Pegamos a largura da tela para dividir os cards certinho (descontando os paddings)
+// Peguei a largura total da tela e dividi por 2 (descontando as margens laterais).
+// Fiz isso para garantir que fiquem sempre duas colunas perfeitas, não importa se é um celular pequeno ou um tablet.
 const cardWidth = (Dimensions.get('window').width / 2) - 24;
 
 const Card = styled.TouchableOpacity`
@@ -28,6 +29,9 @@ const ImageContainer = styled.View`
   justify-content: center;
   align-items: center;
 `;
+// OBS: Forcei o fundo branco (#fff) na ImageContainer acima. 
+// Como as fotos da API da Fake Store geralmente vêm com fundo transparente, se eu deixasse sem essa cor de fundo, 
+// a imagem do produto ia ficar quase invisível quando o Modo Escuro estivesse ativado.
 
 const ProductImage = styled.Image`
   width: 100%;
@@ -40,7 +44,9 @@ const Title = styled.Text`
   color: ${props => props.text};
   margin-bottom: 8px;
   line-height: 18px;
-  height: 36px; /* Mantém o tamanho fixo para 2 linhas, alinhando o grid */
+  height: 36px; 
+  /* Travei a altura do título em 36px e limitei a 2 linhas lá embaixo. 
+     Isso evita que o grid fique "torto" ou quebrado se um produto tiver um nome enorme e o produto do lado tiver um nome curto. */
 `;
 
 const PriceRow = styled.View`
@@ -82,6 +88,9 @@ export default function ProductCard({ data, onPress }) {
         <Price primary={theme.primary}>{formatCurrency(data.price)}</Price>
         <RatingBadge>
           <Feather name="star" size={12} color="#FFB800" />
+          
+          {/* Usei o '?.' e o '0.0' porque a API pode falhar e não mandar a propriedade rating.
+              Assim eu garanto que o app não vai apresentar a tela vermelha de erro para o usuário. */}
           <RatingText textSecondary={theme.textSecondary}>{data.rating?.rate || '0.0'}</RatingText>
         </RatingBadge>
       </PriceRow>
