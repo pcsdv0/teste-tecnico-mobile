@@ -102,14 +102,16 @@ export default function Home({ navigation }) {
           ))}
         </View>
       ) : error ? (
-        <View style={styles.center}>
-          <Feather name="wifi-off" size={48} color={theme.textSecondary} style={{ marginBottom: 16 }} />
-          <Text style={[styles.errorText, { color: theme.textSecondary }]}>{error}</Text>
+        // Nova Tela de Erro Amigável e à prova de falhas de layout
+        <View style={styles.messageContainer}>
+          <Feather name="alert-circle" size={60} color={theme.primary} style={{ marginBottom: 16 }} />
+          <Text style={[styles.messageTitle, { color: theme.text }]}>Ops, algo deu errado!</Text>
+          <Text style={[styles.messageSubtitle, { color: theme.textSecondary }]}>{error}</Text>
         </View>
       ) : filteredProducts.length === 0 ? (
-        <View style={styles.emptyContainer}>
+        <View style={styles.messageContainer}>
           <Feather name="search" size={48} color={theme.border} style={{ marginBottom: 16 }} />
-          <Text style={[styles.emptyText, { color: theme.textSecondary }]}>Nenhum produto encontrado.</Text>
+          <Text style={[styles.messageSubtitle, { color: theme.textSecondary }]}>Nenhum produto encontrado.</Text>
         </View>
       ) : (
         <FlatList
@@ -174,16 +176,24 @@ const styles = StyleSheet.create({
   },
   row: { justifyContent: 'space-between' },
   gridContainer: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', paddingHorizontal: 16 },
-  center: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 },
   
-  // Ajustei a margem do topo para que o aviso de "Nenhum produto" não fique 
-  // escondido atrás do teclado do celular enquanto o usuário digita.
-  emptyContainer: { 
+  // Containers de Feedback (Erro e Vazio) com trava de altura para o Android
+  messageContainer: { 
+    flex: 1, 
+    justifyContent: 'center', 
     alignItems: 'center', 
-    marginTop: 30, 
-    padding: 20 
+    paddingHorizontal: 32, 
+    minHeight: 400, 
   },
-  
-  errorText: { fontSize: 16, textAlign: 'center' },
-  emptyText: { fontSize: 16, textAlign: 'center' },
+  messageTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  messageSubtitle: {
+    fontSize: 16,
+    textAlign: 'center',
+    lineHeight: 24,
+  },
 });
