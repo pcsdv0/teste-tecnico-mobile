@@ -1,16 +1,18 @@
 import React, { createContext, useState } from 'react';
 
-// Criamos o contexto
 export const ThemeContext = createContext();
 
-// Esse Provider vai abraçar o aplicativo inteiro
 export function ThemeProvider({ children }) {
   const [isDark, setIsDark] = useState(false);
 
-  // Definimos as cores de cada tema
+  // Paleta de cores refinada para não cansar a vista
   const theme = {
-    background: isDark ? '#121212' : '#f5f5f5',
-    text: isDark ? '#ffffff' : '#333333',
+    background: isDark ? '#121214' : '#F8F9FA',
+    surface: isDark ? '#202024' : '#FFFFFF', // Cor dos cards e inputs
+    text: isDark ? '#E1E1E6' : '#202024', // Branco 'suave' no dark
+    textSecondary: isDark ? '#A8A8B3' : '#6C757D', // Cinza para descrições
+    primary: '#8257E5', // Roxo moderno para destaques e categorias selecionadas
+    border: isDark ? '#323238' : '#E9ECEF',
   };
 
   function toggleTheme() {

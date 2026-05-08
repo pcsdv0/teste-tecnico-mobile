@@ -1,37 +1,46 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components/native';
+import { ThemeContext } from '../contexts/ThemeContext';
+import { formatCurrency, translateCategory } from '../utils/formatters';
 
-// Usamos ScrollView no lugar da View normal para garantir que a tela seja rolável, 
-// já que a descrição dos produtos pode ser grande e não caber em telas menores.
 const Container = styled.ScrollView`
   flex: 1;
-  background-color: #ffffff;
+  background-color: ${props => props.background};
   padding: 16px;
+`;
+
+const ImageContainer = styled.View`
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 24px;
+  border-width: 1px;
+  border-color: ${props => props.border};
 `;
 
 const ProductImage = styled.Image`
   width: 100%;
   height: 300px;
-  margin-bottom: 24px;
 `;
 
 const Category = styled.Text`
   font-size: 14px;
-  color: #888;
+  color: ${props => props.primary};
   text-transform: uppercase;
+  font-weight: bold;
   margin-bottom: 8px;
 `;
 
 const Title = styled.Text`
   font-size: 22px;
   font-weight: bold;
-  color: #333;
+  color: ${props => props.text};
   margin-bottom: 16px;
 `;
 
 const Price = styled.Text`
-  font-size: 26px;
-  color: #2e8b57;
+  font-size: 28px;
+  color: ${props => props.text};
   font-weight: bold;
   margin-bottom: 24px;
 `;
@@ -39,30 +48,33 @@ const Price = styled.Text`
 const DescriptionTitle = styled.Text`
   font-size: 18px;
   font-weight: bold;
-  color: #333;
+  color: ${props => props.text};
   margin-bottom: 8px;
 `;
 
 const Description = styled.Text`
   font-size: 16px;
-  color: #666;
+  color: ${props => props.textSecondary};
   line-height: 24px;
-  margin-bottom: 40px; /* Margem extra no final para não colar no fundo da tela */
+  margin-bottom: 40px;
 `;
 
 export default function Details({ route }) {
-  // O route.params resgata os dados que a Home enviou pela navegação
   const { product } = route.params;
+  const { theme } = useContext(ThemeContext);
 
   return (
-    <Container>
-      <ProductImage source={{ uri: product.image }} resizeMode="contain" />
-      <Category>{product.category}</Category>
-      <Title>{product.title}</Title>
-      <Price>R$ {product.price.toFixed(2)}</Price>
+    <Container background={theme.background}>
+      <ImageContainer border={theme.border}>
+        <ProductImage source={{ uri: product.image }} resizeMode="contain" />
+      </ImageContainer>
       
-      <DescriptionTitle>Sobre o produto</DescriptionTitle>
-      <Description>{product.description}</Description>
+      <Category primary={theme.primary}>{translateCategory(product.category)}</Category>
+      <Title text={theme.text}>{product.title}</Title>
+      <Price text={theme.text}>{formatCurrency(product.price)}</Price>
+      
+      <DescriptionTitle text={theme.text}>Sobre o produto</DescriptionTitle>
+      <Description textSecondary={theme.textSecondary}>{product.description}</Description>
     </Container>
   );
 }
