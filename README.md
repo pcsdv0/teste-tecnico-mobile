@@ -68,7 +68,7 @@ git clone https://github.com/pcsdv0/teste-tecnico-mobile.git
 
 2. **Acesse a raiz do projeto:**
 
-cd <nome-da-pasta>
+cd cd teste-tecnico-mobile
 
 
 3. **Instale as dependências:**
