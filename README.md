@@ -64,8 +64,7 @@ Para compilar e rodar a aplicação em ambiente local, é necessário possuir o 
 1. **Clone o repositório:**
 
 ```bash
-git clone [https://github.com/pcsdv0/teste-tecnico-mobile.git](https://github.com/pcsdv0/teste-tecnico-mobile.git)
-
+git clone https://github.com/pcsdv0/teste-tecnico-mobile.git
 ```
 
 2. **Acesse a raiz do projeto:**
