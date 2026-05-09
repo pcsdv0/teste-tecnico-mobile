@@ -5,7 +5,7 @@ import { ThemeContext } from '../contexts/ThemeContext';
 import { formatCurrency } from '../utils/formatters';
 import { Feather } from '@expo/vector-icons';
 
-// Peguei a largura total da tela e dividi por 2 (descontando as margens laterais).
+// Peguei a largura total da tela e dividi por 2.
 // Fiz isso para garantir que fiquem sempre duas colunas perfeitas, não importa se é um celular pequeno ou um tablet.
 const cardWidth = (Dimensions.get('window').width / 2) - 24;
 
@@ -29,7 +29,7 @@ const ImageContainer = styled.View`
   justify-content: center;
   align-items: center;
 `;
-// OBS: Forcei o fundo branco (#fff) na ImageContainer acima. 
+// Forcei o fundo branco na ImageContainer acima. 
 // Como as fotos da API da Fake Store geralmente vêm com fundo transparente, se eu deixasse sem essa cor de fundo, 
 // a imagem do produto ia ficar quase invisível quando o Modo Escuro estivesse ativado.
 
@@ -89,8 +89,7 @@ export default function ProductCard({ data, onPress }) {
         <RatingBadge>
           <Feather name="star" size={12} color="#FFB800" />
           
-          {/* Usei o '?.' e o '0.0' porque a API pode falhar e não mandar a propriedade rating.
-              Assim eu garanto que o app não vai apresentar a tela vermelha de erro para o usuário. */}
+          
           <RatingText textSecondary={theme.textSecondary}>{data.rating?.rate || '0.0'}</RatingText>
         </RatingBadge>
       </PriceRow>

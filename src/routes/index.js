@@ -5,23 +5,22 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from '../screens/Home';
 import Details from '../screens/Details';
 
-// Optei pelo 'Native Stack' em vez do Stack Navigator tradicional.
-// A vantagem técnica aqui é a performance: ele delega as animações de transição de tela direto para as 
-// threads nativas do próprio Android/iOS. Isso garante que a navegação do app seja fluida e pareça 
+// Optei pelo 'Native Stack' em vez do Stack Navigator.
+// A vantagem técnica aqui é a performance porque ele tem as animações de transição de tela direto para as 
+// telas nativas do próprio Android ou iOS. Isso ajuda a navegação do app seja fluida e pareça 
 // 100% um aplicativo nativo, sem dar aquelas "engasgadas" comuns.
 const Stack = createNativeStackNavigator();
 
 export default function Routes() {
   return (
-    // Preferi isolar a lógica de roteamento neste arquivo dedicado em vez de jogar tudo misturado no App.js.
-    // Isso mantém a raiz do projeto limpa e deixa a arquitetura preparada para crescer (por exemplo, 
-    // se no futuro precisarmos adicionar um fluxo de telas de Login antes de mostrar a Home).
+    // Preferi isolar a lógica de roteamento neste arquivo dedicado em vez de jogar tudo misturado no App.js pra
+    // manter a raiz do projeto limpa.
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen 
           name="Home" 
           component={Home} 
-          // Ocultando o header padrão para podermos usar o nosso próprio cabeçalho customizado na Home
+          
           options={{ headerShown: false }} 
         />
         <Stack.Screen 

@@ -4,15 +4,15 @@ import { ThemeContext } from '../contexts/ThemeContext';
 import { formatCurrency, translateCategory } from '../utils/formatters';
 
 // Usei ScrollView em vez de uma View normal como container principal. 
-// Como a descrição dos produtos varia bastante de tamanho, isso garante que o usuário consiga rolar a tela tranquilamente, evitando que o texto fique cortado em celulares com telas menores.
+// Como a descrição dos produtos varia bastante de tamanho meio que isso garante que o usuário consiga rolar a tela tranquilamente, evitando que o texto fique cortado em celulares com telas menores.
 const Container = styled.ScrollView`
   flex: 1;
   background-color: ${props => props.background};
   padding: 16px;
 `;
 
-// Mantive o fundo branco forçado aqui também, pelo mesmo motivo do ProductCard: 
-// garantir que as imagens transparentes continuem visíveis e bonitas no Tema Escuro.
+// Mantive o fundo branco forçado aqui também, pelo mesmo motivo do ProductCard que seria
+// garantir que as imagens transparentes continuem visíveis e bonitas no tema Escuro.
 const ImageContainer = styled.View`
   background-color: #fff;
   border-radius: 12px;
@@ -64,9 +64,9 @@ const Description = styled.Text`
 `;
 
 export default function Details({ route }) {
-  // Preferi passar o objeto 'product' inteiro via parâmetros de rotalá da Home.
+  // Preferi passar o objeto 'product' inteiro via parâmetros de rota lá da Home.
   // Como eu já tinha baixado esses dados antes, não faz sentido bater na API de novo só para mostrar essa tela.
-  // Isso economiza internet e a tela abre instantaneamente.
+  
   const { product } = route.params;
   const { theme } = useContext(ThemeContext);
 
@@ -76,8 +76,7 @@ export default function Details({ route }) {
         <ProductImage source={{ uri: product.image }} resizeMode="contain" />
       </ImageContainer>
       
-      {/* A formatação (tradução e moeda) acontece na renderização visual da interface. 
-          Isso mantém os dados brutos intactos caso a gente precise mandá-los para um carrinho de compras ou banco de dados no futuro. */}
+      
       <Category primary={theme.primary}>{translateCategory(product.category)}</Category>
       <Title text={theme.text}>{product.title}</Title>
       <Price text={theme.text}>{formatCurrency(product.price)}</Price>

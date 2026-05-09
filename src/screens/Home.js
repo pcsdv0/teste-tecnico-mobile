@@ -23,7 +23,7 @@ export default function Home({ navigation }) {
 
   async function fetchProducts() {
     try {
-      // De volta ao normal para buscar os 20 produtos reais!
+      
       const response = await api.get('/products'); 
       setProducts(response.data);
     } catch (err) {
@@ -34,7 +34,7 @@ export default function Home({ navigation }) {
   }
 
   // Preferi fazer o filtro de busca e categoria direto na memória.
-  // Isso poupa dados móveis e deixa a resposta mais rapida, sem precisar bater na API de novo a cada letra digitada.
+  // Isso poupa dados  e deixa a resposta mais rapida, sem precisar bater na API de novo a cada letra digitada.
   const filteredProducts = products.filter(product => {
     const matchesSearch = product.title.toLowerCase().includes(searchText.toLowerCase());
     const matchesCategory = selectedCategory === 'Todos' || product.category === selectedCategory;
@@ -93,7 +93,7 @@ export default function Home({ navigation }) {
         </ScrollView>
       </View>
 
-      {/* Controle de Estados da Tela (Loading -> Error -> Empty -> Sucesso) */}
+      
       {loading ? (
         <View style={styles.gridContainer}>
           {[1, 2, 3, 4, 5, 6].map((key) => (
@@ -101,14 +101,14 @@ export default function Home({ navigation }) {
           ))}
         </View>
       ) : error ? (
-        // Nova Tela de Erro Amigável e à prova de falhas de layout
+        // Uma tela de erro amigável e à prova de falhas de layout
         <View style={styles.messageContainer}>
           <Feather name="alert-circle" size={60} color={theme.primary} style={{ marginBottom: 16 }} />
           <Text style={[styles.messageTitle, { color: theme.text }]}>Ops, algo deu errado!</Text>
           <Text style={[styles.messageSubtitle, { color: theme.textSecondary }]}>{error}</Text>
         </View>
       ) : filteredProducts.length === 0 ? (
-        // NOVO: Usando o emptyContainer aqui para subir a lupa
+        
         <View style={styles.emptyContainer}>
           <Feather name="search" size={48} color={theme.border} style={{ marginBottom: 16 }} />
           <Text style={[styles.messageSubtitle, { color: theme.textSecondary }]}>Nenhum produto encontrado.</Text>
@@ -122,7 +122,7 @@ export default function Home({ navigation }) {
           contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 20 }}
           showsVerticalScrollIndicator={false}
           // Optei pelo FlatList em vez de um .map() comum pelo ganho de performance.
-          // O lazy loading nativo dele evita que o celular trave se a lista for muito grande.
+          // O lazy loading nativo dele evita que o celular trave se a lista for muito grande, principalmente esses celulares mais antigos.
           renderItem={({ item }) => (
             <ProductCard
               data={item}
@@ -140,13 +140,13 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center', // Isso aqui garante que o texto e o botão fiquem na mesma linha horizontalmente!
+    alignItems: 'center', 
     paddingHorizontal: 20,
     paddingTop: 30,
     paddingBottom: 16,
   },
   
-  // NOVO: Apenas um título limpo e alinhado
+  
   headerTitleClean: { 
     fontSize: 28, 
     fontWeight: 'bold', 
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
   row: { justifyContent: 'space-between' },
   gridContainer: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', paddingHorizontal: 16 },
   
-  // Containers de Feedback (Erro e Vazio) com trava de altura para o Android
+  
   messageContainer: { 
     flex: 1, 
     justifyContent: 'center', 
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     minHeight: 400, 
   },
   
-  // NOVO: Estilo exclusivo para a busca vazia (fica na parte de cima da tela para fugir do teclado)
+  
   emptyContainer: {
     alignItems: 'center',
     paddingHorizontal: 32,

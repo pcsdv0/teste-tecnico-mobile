@@ -57,15 +57,15 @@ const SkeletonPrice = styled(Animated.View)`
 export default function SkeletonCard() {
   const { theme, isDark } = useContext(ThemeContext);
   
-  // Controle da animação de opacidade para dar o efeito de "pulsar".
+  
   const opacity = useRef(new Animated.Value(0.3)).current;
   
-  // A cor do esqueleto também foi ajustada parase adaptar ao tema escuro para não ofuscar o usuário.
+  // A cor do esqueleto também foi ajustada para se adaptar ao tema escuro para não ofuscar o usuário.
   const skeletonColor = isDark ? '#323238' : '#E2E8F0';
 
   useEffect(() => {
     // O edital pedia o Skeleton como diferencial. Optei por construí-lo do zero usando a Animated API nativa.
-    // Instalar uma biblioteca externa pesada apenas para fazer retângulos piscarem não faria sentido no escopo desse teste.
+    // Instalar uma biblioteca externa pesada apenas para fazer retângulos piscarem não faria sentido no escopo do teste que foi proposto pelo senhor.
     Animated.loop(
       Animated.sequence([
         // O `useNativeDriver: true`aqui é de performance.

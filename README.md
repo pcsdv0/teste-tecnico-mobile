@@ -67,31 +67,29 @@ A arquitetura e as ferramentas foram definidas visando performance, manutenibili
 Para compilar e rodar a aplicação em ambiente local, é necessário possuir o Node.js instalado e o aplicativo Expo Go no smartphone.
 
 1. **Clone o repositório:**
-```bash
-git clone <cole-o-link-do-seu-repositorio-aqui>
 
-```
+git clone https://github.com/pcsdv0/teste-tecnico-mobile.git
+
+
 
 
 2. **Acesse a raiz do projeto:**
-```bash
+
 cd <nome-da-pasta>
 
-```
 
 
 3. **Instale as dependências:**
-```bash
+
 npm install
 
-```
 
 
 4. **Inicie o Metro Bundler (Servidor):**
-```bash
+
 npx expo start
 
-```
+
 
 
 5. **Teste em ambiente físico ou emulado:** Escaneie o QR Code gerado no terminal com o aplicativo Expo Go para visualizar o app no celular, ou pressione a tecla `a` no terminal para rodar via emulador Android.
@@ -112,7 +110,7 @@ src/
 ├── styles/     # Definições globais de layout e tipografia
 └── utils/      # Funções de auxílio geral (formatação de moeda e traduções)
 
-```
+
 
 ---
 
@@ -130,7 +128,7 @@ Durante a construção da aplicação, priorizei escolhas técnicas que proteges
 
 ## Prints da aplicação funcionando
 
-As capturas abaixo validam as entregas de interface, resiliência estrutural e tratamentos de estado.
+As capturas abaixo validam as entregas de interface, estrutura e tratamentos de estado.
 
 ### 1. Vitrine Dinâmica e Tema Escuro
 <p align="center">
